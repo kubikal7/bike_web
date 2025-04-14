@@ -1,5 +1,6 @@
 package com.example.BikeWeb.controller;
 
+import com.example.BikeWeb.model.FavSpots;
 import com.example.BikeWeb.model.User;
 import com.example.BikeWeb.repository.UserRepository;
 import com.example.BikeWeb.services.AuthService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import com.example.BikeWeb.repository.FavSpotsRepository;
 
 import java.util.Optional;
 
@@ -21,6 +23,9 @@ public class UserController {
     private AuthService authService;
 
     @Autowired
+    private FavSpotsRepository favSpots;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping("/all")
@@ -30,6 +35,17 @@ public class UserController {
         }
         return ResponseEntity.ok(usersRepository.findAll());
     }
+
+    @GetMapping("/get-all-fav-places")
+    public ResponseEntity<?> getAllFavPlaces(@RequestHeader("Authorization") String authorizationToken){
+    Optional<User> userOPT = usersRepository.findByToken(authorizationToken);
+    Optional<FavSpots[]> spots = favSpots.findAllByUserId(userOPT.get().getId());
+        if (!authService.isAdmin(authorizationToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok().body(spots);
+    }
+
 
     @GetMapping("/")
     public ResponseEntity<?> getByToken(@RequestHeader("Authorization") String token){

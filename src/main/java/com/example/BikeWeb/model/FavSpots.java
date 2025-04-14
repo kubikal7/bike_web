@@ -15,5 +15,6 @@ public class FavSpots {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private long user_id;
+    @Column(name = "user_id")
+    private long userId;       
 }
