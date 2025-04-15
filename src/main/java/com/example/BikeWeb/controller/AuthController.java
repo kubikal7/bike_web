@@ -54,7 +54,6 @@ public class AuthController {
             //token do bazy danych
             user.setToken(token);
             usersRepository.save(user);
-
             return ResponseEntity.ok(token);
         }
 
