@@ -38,11 +38,11 @@ public class UserController {
 
     @GetMapping("/get-all-fav-places")
     public ResponseEntity<?> getAllFavPlaces(@RequestHeader("Authorization") String authorizationToken){
-    Optional<User> userOPT = usersRepository.findByToken(authorizationToken);
-    Optional<FavSpots[]> spots = favSpots.findAllByUserId(userOPT.get().getId());
-        if (!authService.isAdmin(authorizationToken)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        Optional<User> userOPT = usersRepository.findByToken(authorizationToken);
+        Optional<FavSpots[]> spots = favSpots.findAllByUserId(userOPT.get().getId());
+        //if (!authService.isAdmin(authorizationToken)) {
+            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        //}
         return ResponseEntity.ok().body(spots);
     }
 

@@ -16,5 +16,7 @@ public class FavSpots {
     private long id;
     private String name;
     @Column(name = "user_id")
-    private long userId;       
+    private long userId;
+    @Column(name = "spot_id")
+    private String spotId;
 }

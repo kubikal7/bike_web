@@ -42,7 +42,7 @@ public class UsersOperationController {
         }
 
         User usr = userOPT.get();
-        spot.setName(spot.getName());
+        //spot.setName(spot.getName());
         spot.setUserId(usr.getId());
 
         favSpots.save(spot);
@@ -63,7 +63,7 @@ public class UsersOperationController {
         if (spot.getName() == null || spot.getName().isEmpty() || spot.getName().isBlank() || Long.valueOf(id)==null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid spot name");
         }
-        spot.setName(spot.getName());
+        //spot.setName(spot.getName());
         spot.setUserId(id);
         favSpots.save(spot);
 
@@ -79,7 +79,7 @@ public class UsersOperationController {
         if (spot.getName() == null || spot.getName().isEmpty() || spot.getName().isBlank()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid spot name");
         }
-        favSpots.deleteByNameAndUserId(spot.getName(), userOPT.get().getId());
+        favSpots.deleteByNameAndUserIdAndSpotId(spot.getName(), userOPT.get().getId(), spot.getSpotId());
 
         return ResponseEntity.ok().body("deleted fav spot from db");
     }
@@ -100,7 +100,7 @@ public class UsersOperationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid spot name");
         }
 
-        favSpots.deleteByNameAndUserId(spot.getName(), id);
+        favSpots.deleteByNameAndUserIdAndSpotId(spot.getName(), id, spot.getSpotId());
 
         return ResponseEntity.ok().body("deleted fav spot from user id: "+id);
     }
