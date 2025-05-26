@@ -4,7 +4,9 @@ import com.example.BikeWeb.model.FavSpots;
 import com.example.BikeWeb.model.User;
 import com.example.BikeWeb.repository.UserRepository;
 import com.example.BikeWeb.services.AuthService;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,12 +30,12 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAll(@RequestHeader("Authorization") String token){
+    @GetMapping("/find-by-email/{email}")
+    public ResponseEntity<?> getAll(@RequestHeader("Authorization") String token, @PathVariable String email){
         if (!authService.isAdmin(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.ok(usersRepository.findAll());
+        return ResponseEntity.ok(usersRepository.findByEmail(email));
     }
 
     @GetMapping("/get-all-fav-places")

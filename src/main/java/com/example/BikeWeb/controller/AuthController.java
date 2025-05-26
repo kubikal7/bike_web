@@ -35,11 +35,8 @@ public class AuthController {
 
     @GetMapping("/isadmin")
     public ResponseEntity<?> isAdmin(@RequestHeader("Authorization") String authorizationToken){
-        if(!authService.isAdmin(authorizationToken)){
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        else
-            return ResponseEntity.ok().build();
+        boolean isAdmin = authService.isAdmin(authorizationToken);
+        return ResponseEntity.ok(isAdmin);
     }
 
     @PutMapping("/login")
