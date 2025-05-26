@@ -14,7 +14,7 @@ services:
       - db_data:/var/lib/mysql
 
   backend:
-    build: ./bike_web
+    build: ./BikeWeb
     container_name: spring-backend
     depends_on:
       - mysql

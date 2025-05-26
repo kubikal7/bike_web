@@ -4,15 +4,18 @@ import com.example.BikeWeb.model.FavSpots;
 import com.example.BikeWeb.model.User;
 import com.example.BikeWeb.repository.UserRepository;
 import com.example.BikeWeb.services.AuthService;
-import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.util.Optionals;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.BikeWeb.repository.FavSpotsRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,13 +42,19 @@ public class UserController {
     }
 
     @GetMapping("/get-all-fav-places")
-    public ResponseEntity<?> getAllFavPlaces(@RequestHeader("Authorization") String authorizationToken){
+    public ResponseEntity<List<FavSpots>> getAllFavPlaces(@RequestHeader("Authorization") String authorizationToken) {
         Optional<User> userOPT = usersRepository.findByToken(authorizationToken);
-        Optional<FavSpots[]> spots = favSpots.findAllByUserId(userOPT.get().getId());
-        //if (!authService.isAdmin(authorizationToken)) {
-            //return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        //}
-        return ResponseEntity.ok().body(spots);
+
+        List<FavSpots> spotsList = new ArrayList<>();
+
+        if (userOPT.isPresent()) {
+            Optional<FavSpots[]> spotsOpt = favSpots.findAllByUserId(userOPT.get().getId());
+            if (spotsOpt.isPresent()) {
+                spotsList = Arrays.asList(spotsOpt.get());
+            }
+        }
+
+        return ResponseEntity.ok(spotsList);
     }
 
 
