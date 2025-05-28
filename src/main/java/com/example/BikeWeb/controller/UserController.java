@@ -4,6 +4,7 @@ import com.example.BikeWeb.model.FavSpots;
 import com.example.BikeWeb.model.User;
 import com.example.BikeWeb.repository.UserRepository;
 import com.example.BikeWeb.services.AuthService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.util.Optionals;
@@ -85,6 +86,7 @@ public class UserController {
         return ResponseEntity.ok(usersRepository.save(user));
     }
 
+    @Transactional
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token, @PathVariable long id){
         if (!authService.isAdmin(token)) {
@@ -96,6 +98,7 @@ public class UserController {
         if(userOPT.isEmpty())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 
+        favSpots.deleteAllByUserId(id);
         usersRepository.deleteById(id);
         return ResponseEntity.ok().body("Deleted "+id);
     }

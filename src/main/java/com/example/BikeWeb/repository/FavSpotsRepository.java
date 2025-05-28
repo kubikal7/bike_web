@@ -15,4 +15,6 @@ public interface FavSpotsRepository extends JpaRepository<FavSpots, Long> {
 
     @Transactional
     void deleteByNameAndUserIdAndSpotId(String name, long user_id, String spot_id);
+
+    void deleteAllByUserId(Long userId);
 }
