@@ -12,3 +12,4 @@ Aplikacja prezentująca stacje rowerowe na świecie z wykorzystaniem zewnętrzne
 - Java Spring Boot  
 - MySQL  
 - REST API (api.citybik.es)
+- Docker
