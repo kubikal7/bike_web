@@ -12,12 +12,18 @@ services:
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   backend:
     build: ./BikeWeb
     container_name: spring-backend
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/bikeweb
       SPRING_DATASOURCE_USERNAME: user
